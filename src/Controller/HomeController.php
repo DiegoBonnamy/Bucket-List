@@ -5,16 +5,34 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Repository\WishRepository;
+use Symfony\Entity\Wish;
 
 class HomeController extends AbstractController
 {
     /**
      * @Route("/", name="home")
      */
-    public function index(): Response
+    public function home(WishRepository $repo): Response
     {
+        $wishes = $repo->findBy(
+            ['isPublished' => true],
+            ['dateCreated' => 'ASC']
+        );
+
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController'
+            'controller_name' => 'HomeController',
+            'wishes' => $wishes
+        ]);
+    }
+
+    /**
+     * @Route("/details/{id}", name="details")
+     */
+    public function details(Wish $wish): Response
+    {
+        return $this->render('home/details.html.twig', [
+            'wish' => $wish
         ]);
     }
 
