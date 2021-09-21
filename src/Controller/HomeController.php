@@ -5,8 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Repository\WishRepository;
-use Symfony\Entity\Wish;
+use App\Repository\WishRepository;
+use App\Entity\Wish;
 
 class HomeController extends AbstractController
 {
