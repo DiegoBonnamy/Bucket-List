@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails{% endblock %}
+{% block title %}Add{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,15 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Détails</h1>
-    <h3>{{ wish.title }}</h3>
-    <b>{{ wish.author }}</b>
-    <p>
-        {{ wish.description }}
-    </p>
-    <em>{{ wish.dateCreated|date("d/m/Y Hhi") }}</em>
+    <h1>Add</h1>
+
+    {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-success"> Add </button>
+
+    {{ form_start(end) }}
+
 </div>
 {% endblock %}

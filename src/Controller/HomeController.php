@@ -5,8 +5,11 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Http\HttpFoundation;
 use App\Repository\WishRepository;
 use App\Entity\Wish;
+use App\Form\WishType;
 
 class HomeController extends AbstractController
 {
@@ -37,11 +40,59 @@ class HomeController extends AbstractController
     }
 
     /**
+     * @Route("/delete/{id}", name="deleteWish")
+     */
+    public function deleteWish(Wish $wish): Response
+    {
+        $emi = $this->getDoctrine()->getManager();
+        $emi->remove($wish);
+        $emi->flush();
+
+        return $this->redirectToRoute("home");
+    }
+
+    /**
+     * @Route("/edit/{id}", name="edit")
+     */
+    public function edit(Wish $wish): Response
+    {
+        $emi = $this->getDoctrine()->getManager();
+        // ...
+        $emi->persist($wish);
+        $emi->flush();
+
+        return $this->redirectToRoute("home");
+    }
+
+    /**
+     * @Route("/add", name="add")
+     */
+    public function add(Request $request): Response
+    {
+        $wish = new Wish();
+        $form = $this->createForm(WishType::class, $wish);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()){
+            $emi = $this->getDoctrine()->getManager();
+            $emi->persist($wish);
+            $emi->flush();
+            return $this->redirectToRoute("home");
+        }
+        else{
+            return $this->render('add/index.html.twig',
+                ['form' => $form->createView()]
+            );
+        }
+    }
+
+    /**
      * @Route("/about", name="about")
      */
     public function about(): Response
     {
-        return $this->render('home/about.html.twig');
+        return $this->render('about/index.html.twig');
     }
 
     /**
@@ -49,6 +100,6 @@ class HomeController extends AbstractController
      */
     public function contact(): Response
     {
-        return $this->render('home/contact.html.twig');
+        return $this->render('contact/index.html.twig');
     }
 }

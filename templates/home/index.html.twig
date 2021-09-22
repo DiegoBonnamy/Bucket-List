@@ -13,12 +13,17 @@
 
     <ul>
         {% for wish in wishes %}
-        <li>
-            {{ wish.title }}
-            <a href="{{ path('details', {id: wish.id}) }}">Voir</a>
+        <li>  
+            <a href="{{ path('details', {id: wish.id}) }}">{{ wish.title }}</a>
+            <a href="{{ path('edit', {id: wish.id}) }}" class="btn btn-sm btn-warning"> Edit </a>
+            <a href="{{ path('delete', {id: wish.id}) }}" class="btn btn-sm btn-danger"> Remove </a>
         </li>
         {% endfor %}
     </ul>
+
+    <br/>
+
+    <a href="{{ path('add') }}" class="btn btn-primary">Add</a>
 
 </div>
 {% endblock %}
