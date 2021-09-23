@@ -15,6 +15,9 @@
         {% for wish in wishes %}
         <li>  
             <a href="{{ path('details', {id: wish.id}) }}">{{ wish.title }}</a>
+            {% if wish.category %}
+                <span>{{ wish.category.name }}</span>
+            {% endif %}
             <a href="{{ path('edit', {id: wish.id}) }}" class="btn btn-sm btn-warning"> Edit </a>
             <a href="{{ path('delete', {id: wish.id}) }}" class="btn btn-sm btn-danger"> Remove </a>
         </li>

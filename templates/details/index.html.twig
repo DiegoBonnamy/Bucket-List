@@ -12,9 +12,12 @@
     <h1>Détails</h1>
     <h3>{{ wish.title }}</h3>
     <b>{{ wish.author }}</b>
+    {% if wish.category %}
+        <h6>{{ wish.category.name }}</h6>
+    {% endif %}
     <p>
         {{ wish.description }}
     </p>
-    <em>{{ wish.dateCreated|date("d/m/Y Hhi") }}</em>
+    <em>{{ wish.dateCreated|date("d/m/Y H:i") }}</em>
 </div>
 {% endblock %}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Http\HttpFoundation;
@@ -34,15 +35,15 @@ class HomeController extends AbstractController
      */
     public function details(Wish $wish): Response
     {
-        return $this->render('home/details.html.twig', [
+        return $this->render('details/index.html.twig', [
             'wish' => $wish
         ]);
     }
 
     /**
-     * @Route("/delete/{id}", name="deleteWish")
+     * @Route("/delete/{id}", name="delete")
      */
-    public function deleteWish(Wish $wish): Response
+    public function delete(Wish $wish): Response
     {
         $emi = $this->getDoctrine()->getManager();
         $emi->remove($wish);
@@ -56,12 +57,20 @@ class HomeController extends AbstractController
      */
     public function edit(Wish $wish): Response
     {
-        $emi = $this->getDoctrine()->getManager();
-        // ...
-        $emi->persist($wish);
-        $emi->flush();
+        $form = $this->createForm(WishType::class, $wish);
+        $form->handleRequest($request);
 
-        return $this->redirectToRoute("home");
+        if($form->isSubmitted()){
+            $emi = $this->getDoctrine()->getManager();
+            $emi->persist($wish);
+            $emi->flush();
+            return $this->redirectToRoute("home");
+        }
+        else{
+            return $this->render('add/index.html.twig',
+                ['form' => $form->createView()]
+            );
+        }
     }
 
     /**
@@ -76,6 +85,8 @@ class HomeController extends AbstractController
 
         if($form->isSubmitted()){
             $emi = $this->getDoctrine()->getManager();
+            $wish->setIsPublished(true);
+            $wish->setDateCreated(new \DateTime());
             $emi->persist($wish);
             $emi->flush();
             return $this->redirectToRoute("home");
